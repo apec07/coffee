@@ -39,20 +39,25 @@
 			<tbody>
 			<%
 				String msg = null;
-				int count =0;
+				int count=0;
 				HashSet<CoffeeVO> set = (HashSet<CoffeeVO>)session.getAttribute("refresh");
 				count = (int)session.getAttribute("update");
+				Enumeration<String> xx = session.getAttributeNames();
+				while(xx.hasMoreElements()){
+					out.println(xx.nextElement());
+				}
 				if(set!=null){
 					msg="已取得資料!";
 				}else if(count!=0){
 					msg="已更新 "+count+" 筆資料";	
 				}else{
 					msg="還沒實作喔!";
+					return;
 				}
 				%>
 			<tr><td colspan=5 align="center"><b><%=msg%></b></td></tr>
 				<%
-				if(set==null&&count==0)return;
+				if(set==null)return;
 				Iterator<CoffeeVO> it = set.iterator();
 				while(it.hasNext()){
 					CoffeeVO coffee = it.next();

@@ -50,7 +50,7 @@ public class CoffeeServlet extends HttpServlet {
 		default:
 			request.getServletContext().log("Servlet NOT READY");
 			session.removeAttribute("refresh");
-			session.removeAttribute("update");
+			//session.removeAttribute("update");
 		}
 
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
