@@ -19,9 +19,24 @@ public class CoffeeDAO implements CoffeeVOImp {
 	private static final String UPDATE_STMT = "update COFFEES set SALES=?, TOTAL=TOTAL+SALES where COF_NAME=?";
 
 	@Override
-	public int insert(Connection con, CoffeeVO user) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insert(Connection con, CoffeeVO coffee) {
+		String cof_name = coffee.getCof_name();
+		int sup_id = coffee.getSup_id();
+		float price = coffee.getPrice();
+		PreparedStatement insert;
+		int count=0;
+		try {
+			insert = con.prepareStatement(INSERT_STMT);
+			insert.setString(1, cof_name);
+			insert.setInt(2, sup_id);
+			insert.setFloat(3, price);
+			count=insert.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return count;
 	}
 
 	@Override
@@ -29,22 +44,23 @@ public class CoffeeDAO implements CoffeeVOImp {
 		CoffeeVO coffee = null;
 		Iterator<CoffeeVO> it = set.iterator();
 		int count = 0;
+		int saleIndex=0;
+		int sales[] = new int[] {10,20,30,40,50};
 		while (it.hasNext()) {
 			coffee = it.next();
-			int sales = coffee.getSales();
 			String cof_name = coffee.getCof_name();
 			PreparedStatement update;
 			try {
 
 				update = con.prepareStatement(UPDATE_STMT);
-				update.setInt(1, sales);
+				update.setInt(1, sales[saleIndex]);
 				update.setString(2, cof_name);
 				int result = update.executeUpdate();
 				count += result;
 			} catch (SQLException e) {
 				System.err.println(e);
 			}
-
+			saleIndex++;
 		}
 		return count;
 	}

@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 public interface CoffeeVOImp {
 	
-	int insert(Connection con, CoffeeVO user);
+	int insert(Connection con, CoffeeVO coffee);
 	int updateAll(Connection con, HashSet<CoffeeVO> set);
 	int delete(Connection con, String cof_name);
 	CoffeeVO findByIndex(Connection con,int id);

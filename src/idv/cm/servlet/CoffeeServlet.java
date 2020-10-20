@@ -37,20 +37,33 @@ public class CoffeeServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		switch (type) {
 		case "search":
-			set = searchDb(request, response);
+			set = searchDb(request);
 			session.setAttribute("refresh", set);
+			session.removeAttribute("update");
+			session.removeAttribute("new");
 			break;
 			
 		case "edit":
 			int count=0;
-			count = editDb(request, response);
+			count = editDb(request);
 			session.setAttribute("update", count);
 			session.removeAttribute("refresh");
+			session.removeAttribute("new");
 			break;
+			
+		case "insert":
+			int count1=0;
+			count1 = newCoffee(request);
+			session.setAttribute("new", count1);
+			session.removeAttribute("refresh");
+			session.removeAttribute("update");
+			break;
+			
 		default:
 			request.getServletContext().log("Servlet NOT READY");
 			session.removeAttribute("refresh");
-			//session.removeAttribute("update");
+			session.removeAttribute("update");
+			session.removeAttribute("new");
 		}
 
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
@@ -70,7 +83,26 @@ public class CoffeeServlet extends HttpServlet {
 
 	}
 
-	private int editDb(HttpServletRequest request, HttpServletResponse response) {
+	private int newCoffee(HttpServletRequest request) {
+		Connection con = null;
+		try {
+			con = ConnectionFactory.getInstance().getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		String nameString = request.getParameter("new-cof_name");
+		String supString = request.getParameter("new-cof_sup");
+		String priceString = request.getParameter("new-cof_price");
+		CoffeeVO coffee = new CoffeeVO();
+		coffee.setCof_name(nameString);
+		coffee.setSup_id(new Integer(supString).intValue());
+		coffee.setPrice(new Float(priceString).floatValue());
+		CoffeeDAO dao = new CoffeeDAO();
+		
+		return dao.insert(con, coffee);
+	}
+
+	private int editDb(HttpServletRequest request) {
 		Connection con = null;
 		try {
 			con = ConnectionFactory.getInstance().getConnection();
@@ -79,13 +111,13 @@ public class CoffeeServlet extends HttpServlet {
 		}
 		// get set from DB
 		CoffeeDAO dao = new CoffeeDAO();
-		HashSet<CoffeeVO> set = searchDb(request,response);
+		HashSet<CoffeeVO> set = searchDb(request);
 		int result = dao.updateAll(con, set);
 		request.getServletContext().log("update count = "+result);
 		return result;
 	}
 
-	private HashSet<CoffeeVO> searchDb(HttpServletRequest request, HttpServletResponse response) {
+	private HashSet<CoffeeVO> searchDb(HttpServletRequest request) {
 		// check Connection
 		Connection con = null;
 		try {
