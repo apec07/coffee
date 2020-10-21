@@ -75,7 +75,7 @@ body {
 	</div>
 	<form action="CoffeeServlet" method="post">
 
-		<table border=1>
+		<table class="table" border=1>
 			<thead>
 				<tr>
 					<td colspan=5>
@@ -86,6 +86,7 @@ body {
 					<td colspan=5 align="center">
 					<input type="submit" name="action" value="search"> 
 					<input type="button" value="new dialog" id="newDialog"> 
+					<input type="button" value="EditForm" id="editForm">
 					<input type="submit" name="action" value="edit" id="edit-form"> 
 					<input type="submit" name="action" value="reset"></td>
 
@@ -157,6 +158,21 @@ body {
 	
 
 	<script>
+		//edit form
+		var editForm = document.getElementById("editForm");
+		const table = document.querySelector(".table");
+		table.onclick = function(item) {
+			console.log('editForm click');
+			var row = item.path[1];
+			for(var i=0;i<row.cells.length;i++){
+				console.log(row.cells[i]);	
+			}
+			
+			
+			
+		}
+	
+	    // https://www.w3schools.com/howto/howto_css_modals.asp
 		// Get the modal
 		var modal = document.getElementById("myModal");
 
@@ -165,14 +181,20 @@ body {
 
 		// Get the <span> element that closes the modal
 		var span = document.getElementsByClassName("close")[0];
-
+		var btn_close = document.getElementById("btn_cancel");
+		span.addEventListener('click',closeDialog);
+		btn_close.addEventListener('click',closeDialog);
+		console.log(span.textContent);
+		console.log(btn_close.textContent);
+		
 		// When the user clicks the button, open the modal 
 		btn.onclick = function() {
 			modal.style.display = "block";
 		}
 
 		// When the user clicks on <span> (x), close the modal
-		span.onclick = function() {
+		function closeDialog() {
+			console.log('close dialog...');
 			modal.style.display = "none";
 		}
 

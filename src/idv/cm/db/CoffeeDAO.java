@@ -45,7 +45,7 @@ public class CoffeeDAO implements CoffeeVOImp {
 		Iterator<CoffeeVO> it = set.iterator();
 		int count = 0;
 		int saleIndex=0;
-		int sales[] = new int[] {10,20,30,40,50};
+		int sales[] = new int[] {10,20,30,40,50,60};
 		while (it.hasNext()) {
 			coffee = it.next();
 			String cof_name = coffee.getCof_name();
